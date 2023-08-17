@@ -359,6 +359,9 @@ jscut.priv.cam = jscut.priv.cam || {};
         var rapidFeedGcode = ' F' + namedArgs.rapidFeed;
         var tabGeometry = namedArgs.tabGeometry;
         var tabZ = namedArgs.tabZ;
+        var usePlotter = namedArgs.usePlotter;
+        var plotterPlungeGCode = namedArgs.plungeGCode;
+        var plotterRetractGCode = namedArgs.retractGCode;
 
         if (typeof useZ == 'undefined')
             useZ = false;
@@ -370,13 +373,13 @@ jscut.priv.cam = jscut.priv.cam || {};
 
         var gcode = "";
 
-        var retractGcode =
-            '; Retract\r\n' +
-            'G1 Z' + safeZ.toFixed(decimal) + rapidFeedGcode + '\r\n';
+        var retractGcode = usePlotter
+            ? '; Retract - Plotter\r\n' + plotterRetractGCode + '\r\n'
+            : '; Retract\r\nG1 Z' + safeZ.toFixed(decimal) + rapidFeedGcode + '\r\n';
 
-        var retractForTabGcode =
-            '; Retract for tab\r\n' +
-            'G1 Z' + tabZ.toFixed(decimal) + rapidFeedGcode + '\r\n';
+        var retractForTabGcode = usePlotter
+            ? '; Retract for tab - Plotter\r\n' + plotterRetractGCode + '\r\n'
+            : '; Retract for tab\r\nG1 Z' + tabZ.toFixed(decimal) + rapidFeedGcode + '\r\n';
 
         function getX(p) {
             return p.X * scale + offsetX;
@@ -469,9 +472,9 @@ jscut.priv.cam = jscut.priv.cam || {};
                                 }
                             }
                             if (!executedRamp)
-                                gcode +=
-                                    '; plunge\r\n' +
-                                    'G1 Z' + selectedZ.toFixed(decimal) + plungeFeedGcode + '\r\n';
+                                gcode += usePlotter
+                                    ? '; plunge - plotter\r\n' + plotterPlungeGCode + '\r\n'
+                                    : '; plunge\r\n' + 'G1 Z' + selectedZ.toFixed(decimal) + plungeFeedGcode + '\r\n';
                         } else if (selectedZ > currentZ) {
                             gcode += retractForTabGcode;
                         }

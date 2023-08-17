@@ -402,7 +402,7 @@ along with jscut.  If not, see <http://www.gnu.org/licenses/>.
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                             <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span>
                             <span class="icon-bar"></span>
-                        </button> <a class="navbar-brand" href="index.html" target="_blank">jscut</a>
+                        </button> <a class="navbar-brand" href="index.html" target="_blank">jscut - plotter</a>
                     </div>
 
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -509,6 +509,32 @@ along with jscut.  If not, see <http://www.gnu.org/licenses/>.
                         </div>
                     </div>
                 </div>
+                <!-- Plotter -->
+                <div class="panel panel-default" id="Plotter">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapsePlotter">Plotter</a>
+                        </h3>
+                    </div>
+                    <div id="collapsePlotter" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <table class="table">
+                                <tr>
+                                    <td><label for="usePlotter">Use Plotter</label>
+                                    <td><input id="usePlotter" type="checkbox" data-bind="checked: usePlotter" />
+                                <tr>
+                                    <td><label for="initialWaitSeconds">Initial Waiting (s)</label>
+                                    <td><input type="number" step="1" id="initialWaitSeconds" type="checkbox" data-bind="value: initialWaitSeconds" />
+                                <tr>
+                                    <td><label for="plungeGCode">Plunge Gcode</label>
+                                    <td><textarea id="plungeGCode" data-bind="value: plungeGCode" placeholder=""></textarea></td>
+                                <tr>
+                                    <td><label for="retractGCode">Retract Gcode</label>
+                                    <td><textarea id="retractGCode" data-bind="value: retractGCode" placeholder=""></textarea></td>
+                            </table>
+                        </div>
+                    </div>
+                </div>
                 <!-- Curve To Line Conversion -->
                 <div class="panel panel-default" id="CurveToLine">
                     <div class="panel-heading">
@@ -592,6 +618,7 @@ along with jscut.  If not, see <http://www.gnu.org/licenses/>.
     <script src="js/UnitConverter.js"></script>
     <script src="js/SvgViewModel.js"></script>
     <script src="js/MaterialViewModel.js"></script>
+    <script src="js/PlotterViewModel.js"></script>
     <script src="js/SelectionViewModel.js"></script>
     <script src="js/OperationsViewModel.js"></script>
     <script src="js/TabsViewModel.js"></script>

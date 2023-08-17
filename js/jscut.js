@@ -45,6 +45,7 @@ var renderPath;
 
 var svgViewModel;
 var materialViewModel;
+var plotterViewModel;
 var selectionViewModel;
 var toolModel;
 var operationsViewModel;
@@ -122,6 +123,7 @@ window.addEventListener("load", function () {
 miscViewModel = new MiscViewModel();
 svgViewModel = new SvgViewModel();
 materialViewModel = new MaterialViewModel();
+plotterViewModel = new PlotterViewModel();
 selectionViewModel = new SelectionViewModel(svgViewModel, materialViewModel, selectionGroup);
 toolModel = new ToolModel();
 operationsViewModel = new OperationsViewModel(
@@ -130,9 +132,10 @@ operationsViewModel = new OperationsViewModel(
 tabsViewModel = new TabsViewModel(
     miscViewModel, options, svgViewModel, materialViewModel, selectionViewModel, tabsGroup,
     function () { gcodeConversionViewModel.generateGcode(); });
-gcodeConversionViewModel = new GcodeConversionViewModel(options, miscViewModel, materialViewModel, toolModel, operationsViewModel, tabsViewModel);
+gcodeConversionViewModel = new GcodeConversionViewModel(options, miscViewModel, materialViewModel, plotterViewModel, toolModel, operationsViewModel, tabsViewModel);
 
 ko.applyBindings(materialViewModel, $("#Material")[0]);
+ko.applyBindings(plotterViewModel, $("#Plotter")[0]);
 ko.applyBindings(selectionViewModel, $("#CurveToLine")[0]);
 ko.applyBindings(selectionViewModel, $("#Selector")[0]);
 ko.applyBindings(toolModel, $("#Tool")[0]);
@@ -226,6 +229,7 @@ function tutorial(step, message) {
 }
 
 tutorial(1, 'Open an SVG file.');
+makeAllSameUnit("mm");
 
 function loadSvg(alert, filename, content) {
     svg = Snap.parse(content);
@@ -398,6 +402,7 @@ function toJson() {
     return {
         'svg': svgViewModel.toJson(),
         'material': materialViewModel.toJson(),
+        'plotter': plotterViewModel.toJson(),
         'curveToLineConversion': selectionViewModel.toJson(),
         'tool': toolModel.toJson(),
         'operations': operationsViewModel.toJson(),
@@ -410,6 +415,7 @@ function fromJson(json) {
     if (json) {
         svgViewModel.fromJson(json.svg);
         materialViewModel.fromJson(json.material);
+        plotterViewModel.fromJson(json.plotter);
         selectionViewModel.fromJson(json.curveToLineConversion);
         toolModel.fromJson(json.tool);
         operationsViewModel.fromJson(json.operations);

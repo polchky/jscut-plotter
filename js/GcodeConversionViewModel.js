@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with jscut.  If not, see <http://www.gnu.org/licenses/>.
 
-function GcodeConversionViewModel(options, miscViewModel, materialViewModel, toolModel, operationsViewModel, tabsViewModel) {
+function GcodeConversionViewModel(options, miscViewModel, materialViewModel, plotterViewModel, toolModel, operationsViewModel, tabsViewModel) {
     "use strict";
     var self = this;
     var allowGen = true;
@@ -87,6 +87,10 @@ function GcodeConversionViewModel(options, miscViewModel, materialViewModel, too
         var topZ = self.unitConverter.fromInch(materialViewModel.matTopZ.toInch());
         var tabCutDepth = self.unitConverter.fromInch(tabsViewModel.maxCutDepth.toInch());
         var tabZ = topZ - tabCutDepth;
+        var usePlotter = plotterViewModel.usePlotter();
+        var initialWaitSeconds = plotterViewModel.initialWaitSeconds();
+        var plungeGCode = plotterViewModel.plungeGCode();
+        var retractGCode = plotterViewModel.retractGCode();
 
         if(passDepth <= 0) {
             showAlert("Pass Depth is not greater than 0.", "alert-danger");
@@ -115,6 +119,9 @@ function GcodeConversionViewModel(options, miscViewModel, materialViewModel, too
         else
             gcode += "G21         ; Set units to mm\r\n";
         gcode += "G90         ; Absolute positioning\r\n";
+        if (usePlotter) {
+            gcode += "G4 P" + initialWaitSeconds + "      ; Initial wait - plotter\r\n";
+        }
         gcode += "G1 Z" + safeZ + " F" + rapidRate + "      ; Move to clearance level\r\n"
 
         for (var opIndex = 0; opIndex < ops.length; ++opIndex) {
@@ -156,6 +163,10 @@ function GcodeConversionViewModel(options, miscViewModel, materialViewModel, too
                 rapidFeed:      rapidRate,
                 tabGeometry:    tabGeometry,
                 tabZ:           tabZ,
+                usePlotter:     usePlotter,
+                initialWaitSeconds: initialWaitSeconds,
+                plungeGCode:    plungeGCode,
+                retractGCode:   retractGCode,
             });
         }
 
